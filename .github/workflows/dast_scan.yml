@@ -36,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: zap/wrk/zap_report.html
+          path: $(pwd):/zap/wrk/zap_report.html
