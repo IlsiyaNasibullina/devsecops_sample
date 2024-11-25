@@ -37,5 +37,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: /zap/wrk/test.md
+          path: test.md
           #path: $GITHUB_WORKSPACE/zap/wrk/zap_report.html
