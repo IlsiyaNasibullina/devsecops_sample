@@ -28,9 +28,8 @@ jobs:
 
       - name: Run Dynamic Application Security Testing with ZAP
         run: |
-          echo "biba" > $GITHUB_WORKSPACE/zap/wrk/test.md
-          ls
-          docker run -u zap -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap.sh -cmd -host 127.0.0.1 -port 8000 -duration 3600 -quickurl http://127.0.0.1:8000 -quickout zap/wrk/zap_report.html -quickprogress
+          docker run -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable touch /zap/wrk/zap_report.html
+          #docker run -u zap -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap.sh -cmd -host 127.0.0.1 -port 8000 -duration 3600 -quickurl http://127.0.0.1:8000 -quickout zap/wrk/zap_report.html -quickprogress
           echo "DAST Report generated at /zap/wrk/zap_report.html"
 
       - name: Commit file
