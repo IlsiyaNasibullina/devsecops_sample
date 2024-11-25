@@ -22,7 +22,12 @@ jobs:
         run: |
           docker pull ghcr.io/zaproxy/zaproxy:stable
 
+      - name: Create Report Directory
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/zap/wrk  # Create a writable reports directory
+
       - name: Run Dynamic Application Security Testing with ZAP
         run: |
-          docker run -u zap -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap.sh -cmd -host 127.0.0.1 -port 8000 -quickurl http://127.0.0.1:8000 -quickout /zap/wrk/zap_report.html -quickprogress
-          echo "DAST Report generated at /zap/wrk/zap_report.html"
+          echo "biba" > test.md
+          #docker run -u zap -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap.sh -cmd -host 127.0.0.1 -port 8000 -quickurl http://127.0.0.1:8000 -quickout /zap/wrk/zap_report.html -quickprogress
+          #echo "DAST Report generated at /zap/wrk/zap_report.html"
