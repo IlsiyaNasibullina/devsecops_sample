@@ -18,6 +18,10 @@ jobs:
         run: |
           sleep 20 # Wait for the application to start
 
+      - name: Install OWASP ZAP Docker
+        run: |
+          docker pull owasp/zap2docker-stable
+
       - name: Run Dynamic Application Security Testing with ZAP
         run: |
           docker run -t owasp/zap2docker-stable zap.sh -cmd -quickstart -quickstart.port 8080 -quickstart.disableban -quickstart.automation -quickstart.zap.home /zap -quickstart.exclude 127.0.0.1 -quickstart.target http://127.0.0.1:8000
