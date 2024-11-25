@@ -20,13 +20,13 @@ jobs:
 
       - name: Install OWASP ZAP Docker
         run: |
-          docker pull owasp/zap2docker-stable
+          docker pull ghcr.io/zaproxy/zaproxy:stable
 
       - name: Run Dynamic Application Security Testing with ZAP
         run: |
-          docker run -t owasp/zap2docker-stable zap.sh -cmd -quickstart -quickstart.port 8080 -quickstart.disableban -quickstart.automation -quickstart.zap.home /zap -quickstart.exclude 127.0.0.1 -quickstart.target http://127.0.0.1:8000
+          docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap.sh -cmd -quickstart -quickstart.port 8080 -quickstart.disableban -quickstart.automation -quickstart.zap.home /zap -quickstart.exclude 127.0.0.1 -quickstart.target http://127.0.0.1:8000
 
       - name: Generate report
         run: |
-          docker run -t owasp/zap2docker-stable zap.sh -cmd -report /zap/zap_report.html -format "html"
+          docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap.sh -cmd -report /zap/zap_report.html -format "html"
           echo "DAST Report generated at /zap/zap_report.html"
