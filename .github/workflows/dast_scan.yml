@@ -30,7 +30,7 @@ jobs:
         run: |
           docker run --name zap_runner -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable touch zap_report.html
           CONTAINER_ID=$(docker ps -aqf "name=zap_runner")
-          docker cp $CONTAINER_ID:/zap_report.html $GITHUB_WORKSPACE/zap/wrk/zap_report.html
+          docker cp $CONTAINER_ID:zap_report.html $GITHUB_WORKSPACE/zap/wrk/zap_report.html
           #docker run -u zap -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap.sh -cmd -host 127.0.0.1 -port 8000 -duration 3600 -quickurl http://127.0.0.1:8000 -quickout zap_report.html -quickprogress
           echo "DAST Report generated at /zap/wrk/zap_report.html"
 
