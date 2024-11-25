@@ -35,6 +35,6 @@ jobs:
 
       - name: Commit file
         run: |
-          git add /zap/wrk/test.md
+          git add zap/wrk/test.md
           git commit -m "Add persisted file" || echo "No changes to commit"
           git push
