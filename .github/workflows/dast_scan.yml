@@ -11,34 +11,25 @@ jobs:
 
       - name: Pull, build and run PyGoat
         run: |
-          #docker pull pygoat/pygoat:latest
-          #docker run --rm -d -p 8000:8000 pygoat/pygoat:latest
+          docker pull pygoat/pygoat:latest
+          docker run --rm -d -p 8000:8000 pygoat/pygoat:latest
 
       - name: Wait for PyGoat to be ready
         run: |
-          #sleep 20 # Wait for the application to start
-
-      - name: Install ZAP Docker
-        run: |
-          #docker pull ghcr.io/zaproxy/zaproxy:stable
-
-      - name: Create Report Directory
-        run: |
-          mkdir -p $GITHUB_WORKSPACE/zap/wrk
+          sleep 20 # Wait for the application to start
 
       - name: Run Dynamic Application Security Testing with ZAP
-        run: |
-          docker run --name zap_runner -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable touch zap_report.html
-          CONTAINER_ID=$(docker ps -aqf "name=zap_runner")
-          docker exec -d zap_runner ls
-          docker cp $CONTAINER_ID:zap_report.html $GITHUB_WORKSPACE/zap/wrk/zap_report.html
-          #docker run -u zap -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap.sh -cmd -host 127.0.0.1 -port 8000 -duration 3600 -quickurl http://127.0.0.1:8000 -quickout zap_report.html -quickprogress
-          echo "DAST Report generated at /zap/wrk/zap_report.html"
+        uses: zaproxy/action-baseline@v0.13.0
+        with:
+          target: http://127.0.0.1:8000
+          cmd_options: '-r report_html.html'
+          allow_issue_writing: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Commit file
-        run: |
-          git config --local user.email "dinaraparanid@gmail.com"
-          git config --local user.name "dinaraparanid"
-          git add zap/wrk/zap_report.html
-          git commit -m "Add report" || echo "No changes to commit"
-          git push
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: |
+            report_html.html
