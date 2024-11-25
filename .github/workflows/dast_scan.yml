@@ -35,6 +35,8 @@ jobs:
 
       - name: Commit file
         run: |
+          git config --local user.email "dinaraparanid@gmail.com"
+          git config --local user.name "dinaraparanid"
           git add zap/wrk/test.md
           git commit -m "Add persisted file" || echo "No changes to commit"
           git push
