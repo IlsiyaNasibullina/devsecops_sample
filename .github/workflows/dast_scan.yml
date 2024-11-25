@@ -11,32 +11,32 @@ jobs:
 
       - name: Pull, build and run PyGoat
         run: |
-          #docker pull pygoat/pygoat:latest
-          #docker run --rm -d -p 8000:8000 pygoat/pygoat:latest
+          docker pull pygoat/pygoat:latest
+          docker run --rm -d -p 8000:8000 pygoat/pygoat:latest
 
       - name: Wait for PyGoat to be ready
         run: |
-          #sleep 20 # Wait for the application to start
+          sleep 20 # Wait for the application to start
 
-      - name: Install OWASP ZAP Docker
+      - name: Install ZAP Docker
         run: |
-          #docker pull ghcr.io/zaproxy/zaproxy:stable
+          docker pull ghcr.io/zaproxy/zaproxy:stable
 
       - name: Create Report Directory
         run: |
-          mkdir -p $GITHUB_WORKSPACE/zap/wrk  # Create a writable reports directory
+          mkdir -p $GITHUB_WORKSPACE/zap/wrk
 
       - name: Run Dynamic Application Security Testing with ZAP
         run: |
           echo "biba" > $GITHUB_WORKSPACE/zap/wrk/test.md
           ls
-          #docker run -u zap -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap.sh -cmd -host 127.0.0.1 -port 8000 -quickurl http://127.0.0.1:8000 -quickout /zap/wrk/zap_report.html -quickprogress
-          #echo "DAST Report generated at /zap/wrk/zap_report.html"
+          docker run -u zap -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap.sh -cmd -host 127.0.0.1 -port 8000 -quickurl http://127.0.0.1:8000 -quickout /zap/wrk/zap_report.html -quickprogress
+          echo "DAST Report generated at /zap/wrk/zap_report.html"
 
       - name: Commit file
         run: |
           git config --local user.email "dinaraparanid@gmail.com"
           git config --local user.name "dinaraparanid"
-          git add zap/wrk/test.md
-          git commit -m "Add persisted file" || echo "No changes to commit"
+          git add zap/wrk/zap_report.html
+          git commit -m "Add report" || echo "No changes to commit"
           git push
