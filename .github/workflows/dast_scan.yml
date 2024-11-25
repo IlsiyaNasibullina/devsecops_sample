@@ -31,3 +31,9 @@ jobs:
           echo "biba" > test.md
           #docker run -u zap -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap.sh -cmd -host 127.0.0.1 -port 8000 -quickurl http://127.0.0.1:8000 -quickout /zap/wrk/zap_report.html -quickprogress
           #echo "DAST Report generated at /zap/wrk/zap_report.html"
+
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report
+          path: zap/wrk/zap_report.html
