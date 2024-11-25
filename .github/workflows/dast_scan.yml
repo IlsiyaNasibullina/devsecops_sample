@@ -24,9 +24,8 @@ jobs:
 
       - name: Run Dynamic Application Security Testing with ZAP
         run: |
-          docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap.sh -cmd -quickstart -quickstart.port 8080 -quickstart.disableban -quickstart.automation -quickstart.zap.home /zap -quickstart.exclude 127.0.0.1 -quickstart.target http://127.0.0.1:8000
+          docker run -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap.sh -cmd -quickurl http://127.0.0.1:8000 -quickout /zap/wrk/zap_report.html -quickprogress -quickstart
 
       - name: Generate report
         run: |
-          docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap.sh -cmd -report /zap/zap_report.html -format "html"
-          echo "DAST Report generated at /zap/zap_report.html"
+          echo "DAST Report generated at /zap/wrk/zap_report.html"
