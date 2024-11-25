@@ -1,0 +1,28 @@
+name: DastScan
+
+on: [push]
+
+jobs:
+  dast_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Pull, build and run PyGoat
+        run: |
+          docker pull pygoat/pygoat:latest
+          docker run --rm -d -p 8000:8000 pygoat/pygoat:latest
+
+      - name: Wait for PyGoat to be ready
+        run: |
+          sleep 20 # Wait for the application to start
+
+      - name: Run Dynamic Application Security Testing with ZAP
+        run: |
+          docker run -t owasp/zap2docker-stable zap.sh -cmd -quickstart -quickstart.port 8080 -quickstart.disableban -quickstart.automation -quickstart.zap.home /zap -quickstart.exclude 127.0.0.1 -quickstart.target http://127.0.0.1:8000
+
+      - name: Generate report
+        run: |
+          docker run -t owasp/zap2docker-stable zap.sh -cmd -report /zap/zap_report.html -format "html"
+          echo "DAST Report generated at /zap/zap_report.html"
